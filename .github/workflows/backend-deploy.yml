@@ -30,11 +30,6 @@ jobs:
         run: npm install
         working-directory: backend
 
-      # 4️⃣ Run tests (optional but recommended)
-      - name: Run Tests
-        "test": 'echo "Error: no test specified" && exit 1'
-        working-directory: backend
-
       # 5️⃣ Build project (if applicable)
       - name: Build Project
         run: npm run build --if-present
