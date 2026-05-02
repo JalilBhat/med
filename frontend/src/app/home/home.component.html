@@ -1,0 +1,25 @@
+<section class="home-shell">
+    <header class="home-header">
+        <h1>Welcome to Med App</h1>
+        <button (click)="logout()" class="logout-btn">Logout</button>
+    </header>
+
+    <main class="home-content">
+        <div class="welcome-card">
+            <h2>Dashboard</h2>
+            <p>You are successfully logged in!</p>
+            <div class="features">
+                <div class="feature-card">
+                    <h3>Users</h3>
+                    <p>Manage user accounts</p>
+                    <button routerLink="/users">View Users</button>
+                </div>
+                <div class="feature-card">
+                    <h3>Profile</h3>
+                    <p>Update your profile</p>
+                    <button>Edit Profile</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</section>

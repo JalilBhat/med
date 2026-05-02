@@ -1,0 +1,19 @@
+<section class="auth-shell">
+    <h2>Login</h2>
+    <form (ngSubmit)="submit()" class="auth-form">
+        <label>
+            Username
+            <input type="text" name="username" [(ngModel)]="username" required />
+        </label>
+
+        <label>
+            Password
+            <input type="password" name="password" [(ngModel)]="password" required />
+        </label>
+
+        <button type="submit">Login</button>
+
+        <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+        <p class="hint">Need an account? <a routerLink="/register">Register</a></p>
+    </form>
+</section>

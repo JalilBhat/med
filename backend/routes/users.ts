@@ -66,7 +66,6 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
       username: string;
       password: string;
     };
-
     // Find user
     const user: IUser | null = await User.findOne({ username });
     if (!user) {
@@ -84,7 +83,7 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
     // Generate JWT token
     const token = jwt.sign(
       { id: user._id, username: user.username },
-      process.env.JWT_SECRET || "your-secret-key",
+      process.env.JWT_SECRET || "abcdef123456",
       { expiresIn: "1h" },
     );
 
@@ -98,7 +97,7 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
 // GET /api/users - Get all users with pagination
 router.get(
   "/",
-  authenticateToken,
+  //authenticateToken,
   async (req: Request, res: Response): Promise<void> => {
     try {
       const page = parseInt(req.query.page as string) || 1;

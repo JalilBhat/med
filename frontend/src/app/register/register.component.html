@@ -1,0 +1,25 @@
+<section class="auth-shell">
+    <h2>Register</h2>
+    <form (ngSubmit)="submit()" class="auth-form">
+        <label>
+            Username
+            <input type="text" name="username" [(ngModel)]="username" required />
+        </label>
+
+        <label>
+            Email
+            <input type="email" name="email" [(ngModel)]="email" />
+        </label>
+
+        <label>
+            Password
+            <input type="password" name="password" [(ngModel)]="password" required />
+        </label>
+
+        <button type="submit">Create account</button>
+
+        <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+        <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+        <p class="hint">Already have an account? <a routerLink="/login">Login</a></p>
+    </form>
+</section>

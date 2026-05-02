@@ -18,6 +18,7 @@ export const authenticateToken = async (
 ): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
+    console.log("Auth header:", authHeader);
     const token =
       authHeader && authHeader.startsWith("Bearer ")
         ? authHeader.substring(7)
@@ -27,7 +28,7 @@ export const authenticateToken = async (
       res.status(401).json({ message: "Access token required" });
       return;
     }
-
+    console.log("Decoded token:", token);
     // Verify token
     const decoded = jwt.verify(
       token,
