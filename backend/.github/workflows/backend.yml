@@ -1,38 +1,45 @@
-name: Backend CICD
+name: Backend CI/CD
+
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - develop
   pull_request:
-    branches: [main]
-    jobs:
-      build:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout code
-          - uses: actions/checkout@v2
-          - name: Setup Node.js
-            uses: actions/setup-node@v2
-            with:
-              node-version: "14"
-              cache: "npm"
-          - name: Install dependencies
-            run: npm ci
-          - name: Run Lint
-            run: |
-              if [ -f package.json ] && grep -q '"lint"' package.json; then
-                npm run lint
-              else
-                echo "No lint script found, skipping..."
-              fi
-          - name: Run tests
-            run: echo "No tests specified, skipping test step"
-          - name: Deploy to Render
-            if: github.ref == 'refs/heads/main'
-            run: |
-              curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
-          - name: Health Check
-            if: github.ref == 'refs/heads/main'
-            run: |
-              echo "Checking API health..."
-              sleep 10
-              curl -f ${{ secrets.APP_URL }} || exit 1
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout code
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      # 3️⃣ Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # 4️⃣ Run tests (optional but recommended)
+      - name: Run Tests
+        run: npm test
+
+      # 5️⃣ Build project (if applicable)
+      - name: Build Project
+        run: npm run build --if-present
+
+      # 6️⃣ Deploy to Render
+      - name: Deploy to Render
+        if: github.ref == 'refs/heads/main'
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
