@@ -17,25 +17,34 @@ jobs:
     steps:
       # 1️⃣ Checkout code
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # 2️⃣ Setup Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "18"
 
       # 3️⃣ Install dependencies
       - name: Install Dependencies
+        working-directory: backend
         run: npm install
-        working-directory: backend
 
-      # 4️⃣ Build project (if applicable)
+      # 4️⃣ Create .env from GitHub Secrets
+      - name: Create .env file
+        working-directory: backend
+        run: |
+          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "ALLOWED_ORIGINS=${{ secrets.ALLOWED_ORIGINS }}" >> .env
+
+      # 5️⃣ Build project (if applicable)
       - name: Build Project
-        run: npm run build --if-present
         working-directory: backend
+        run: npm run build --if-present
 
-      # 5️⃣ Deploy to Render
+      # 6️⃣ Deploy to Render (only main branch)
       - name: Deploy to Render
         if: github.ref == 'refs/heads/main'
         run: |
