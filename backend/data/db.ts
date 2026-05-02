@@ -4,7 +4,9 @@ import mongoose from "mongoose";
 const uri: string =
   process.env.MONGODB_URI ||
   (() => {
-    throw new Error("Environment variable DB_URI is required but not defined.");
+    throw new Error(
+      "Environment variable MONGODB_URI is required but not defined.",
+    );
   })();
 mongoose
   .connect(uri)
