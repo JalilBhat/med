@@ -7,6 +7,10 @@ import { authenticateToken } from "../middleware/auth";
 
 const router = express.Router();
 
+router.get("/test", (req: Request, res: Response) => {
+  res.json({ message: "User routes are working!" });
+});
+
 // POST /api/users/register - Register a new user
 router.post("/register", async (req: Request, res: Response): Promise<void> => {
   try {
