@@ -28,14 +28,17 @@ jobs:
       # 3️⃣ Install dependencies
       - name: Install Dependencies
         run: npm install
+        working-directory: backend
 
       # 4️⃣ Run tests (optional but recommended)
       - name: Run Tests
         run: npm test
+        working-directory: backend
 
       # 5️⃣ Build project (if applicable)
       - name: Build Project
         run: npm run build --if-present
+        working-directory: backend
 
       # 6️⃣ Deploy to Render
       - name: Deploy to Render
