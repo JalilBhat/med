@@ -30,12 +30,12 @@ jobs:
         run: npm install
         working-directory: backend
 
-      # 5️⃣ Build project (if applicable)
+      # 4️⃣ Build project (if applicable)
       - name: Build Project
         run: npm run build --if-present
         working-directory: backend
 
-      # 6️⃣ Deploy to Render
+      # 5️⃣ Deploy to Render
       - name: Deploy to Render
         if: github.ref == 'refs/heads/main'
         run: |
