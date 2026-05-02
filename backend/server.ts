@@ -8,6 +8,7 @@ dotenv.config();
 
 // Connect to MongoDB
 import "./data/db";
+import { connectDB } from "./data/db";
 
 const app = express();
 
@@ -49,4 +50,11 @@ app.get("/api/v1/health", (req: Request, res: Response) => {
 app.use("/api/v1/users", usersRouter);
 
 const PORT = process.env.PORT;
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+
+const startServer = async () => {
+  await connectDB(); // 🔥 IMPORTANT (wait for DB)
+
+  app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+};
+
+startServer();
