@@ -1,0 +1,36 @@
+name: Frontend CI/CD (Vercel)
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+      - develop
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Build Angular App
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Deploy to Vercel
+        run: |
+          npm install -g vercel
+          vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --confirm
