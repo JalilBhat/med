@@ -1,6 +1,7 @@
 services:
-  - type: static
+  - type: web
     name: med-frontend
+    runtime: static
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist/frontend/browser
