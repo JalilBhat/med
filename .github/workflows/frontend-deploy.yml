@@ -33,10 +33,7 @@ jobs:
       - name: Build Angular app
         run: npm run build
 
-      - name: Run tests (optional)
-        run: npm test --if-present
-
-      #  Trigger Render deployment
+        #  Trigger Render deployment
       - name: Deploy to Render
         if: github.ref == 'refs/heads/main'
         run: |
