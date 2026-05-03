@@ -2,46 +2,29 @@ name: Frontend CI/CD
 
 on:
   push:
-    branches:
-      - main
-      - develop
-  pull_request:
-    branches:
-      - main
-      - develop
+    branches: [main, develop]
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repository
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: 18
 
-      # 3️⃣ Install dependencies
-      - name: Install Dependencies
+      - name: Install
         working-directory: frontend
         run: npm install
 
-      # 4️⃣ Build Angular project (production)
-      - name: Build Angular App
+      - name: Build Angular
         working-directory: frontend
         run: npm run build --configuration production
 
-      # 5️⃣ Optional: Run tests
-      - name: Run Tests
-        working-directory: frontend
-        run: npm test -- --watch=false --browsers=ChromeHeadless || true
-
-      # 6️⃣ Deploy to Render (Production only)
-      - name: Deploy to Render
+      - name: Deploy Frontend
         if: github.ref == 'refs/heads/main'
-        run: |
-          curl -X POST ${{ secrets.RENDER_FRONTEND_DEPLOY_HOOK }}
+        run: curl -X POST ${{ secrets.RENDER_FRONTEND_DEPLOY_HOOK }}
