@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../services/auth.service';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../environments/environment.prod';
 
 interface User {
   _id: string;
