@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../../environment/environment';
 
 export interface LoginRequest {
   username: string;
@@ -28,12 +29,12 @@ export interface AuthResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'https://localhost:8080/api/v1/users';
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
   login(payload: LoginRequest) {
-    return this.http.post<AuthResponse>(`${this.baseUrl}/login`, payload).pipe(
+    return this.http.post<AuthResponse>(`${this.baseUrl}login`, payload).pipe(
       tap((response) => {
         if (response.token) {
           localStorage.setItem('authToken', response.token);
@@ -44,7 +45,7 @@ export class AuthService {
 
   register(payload: RegisterRequest) {
     return this.http
-      .post<AuthResponse>(`${this.baseUrl}/register`, payload)
+      .post<AuthResponse>(`${this.baseUrl}register`, payload)
       .pipe(
         tap((response) => {
           if (response.token) {

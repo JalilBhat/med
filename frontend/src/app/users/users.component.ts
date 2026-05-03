@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../services/auth.service';
+import { environment } from '../../../environment/environment.prod';
 
 interface User {
   _id: string;
@@ -36,6 +37,7 @@ export class UsersComponent implements OnInit {
   pagination: UsersResponse['pagination'] | null = null;
   loading = false;
   error = '';
+  private baseUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
@@ -61,10 +63,9 @@ export class UsersComponent implements OnInit {
     });
 
     this.http
-      .get<UsersResponse>(
-        `https://localhost:8080/api/v1/users?page=${page}&limit=${limit}`,
-        { headers },
-      )
+      .get<UsersResponse>(`${this.baseUrl}users?page=${page}&limit=${limit}`, {
+        headers,
+      })
       .subscribe({
         next: (response) => {
           this.users = response.users;
