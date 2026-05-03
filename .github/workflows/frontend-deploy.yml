@@ -23,7 +23,7 @@ jobs:
 
       - name: Build Angular
         working-directory: frontend
-        run: npm run build --configuration production
+        run: npm run build
 
       - name: Deploy Frontend
         if: github.ref == 'refs/heads/main'
