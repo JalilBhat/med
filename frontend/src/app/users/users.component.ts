@@ -62,7 +62,7 @@ export class UsersComponent implements OnInit {
 
     this.http
       .get<UsersResponse>(
-        `http://localhost:8080/api/v1/users?page=${page}&limit=${limit}`,
+        `https://localhost:8080/api/v1/users?page=${page}&limit=${limit}`,
         { headers },
       )
       .subscribe({

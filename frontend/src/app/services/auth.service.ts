@@ -28,7 +28,7 @@ export interface AuthResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8080/api/v1/users';
+  private baseUrl = 'https://localhost:8080/api/v1/users';
 
   constructor(private http: HttpClient) {}
 

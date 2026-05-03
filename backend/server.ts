@@ -18,8 +18,8 @@ const corsOptions = {
     ? process.env.ALLOWED_ORIGINS.split(",")
     : [
         "http://localhost:8080",
-        "http://localhost:8081",
-        "http://localhost:4200",
+        "https://localhost:8080",
+        "https://localhost:4200",
       ], // Allow specific origins
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
