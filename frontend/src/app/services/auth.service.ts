@@ -34,18 +34,20 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(payload: LoginRequest) {
-    return this.http.post<AuthResponse>(`${this.baseUrl}login`, payload).pipe(
-      tap((response) => {
-        if (response.token) {
-          localStorage.setItem('authToken', response.token);
-        }
-      }),
-    );
+    return this.http
+      .post<AuthResponse>(`${this.baseUrl}users/login`, payload)
+      .pipe(
+        tap((response) => {
+          if (response.token) {
+            localStorage.setItem('authToken', response.token);
+          }
+        }),
+      );
   }
 
   register(payload: RegisterRequest) {
     return this.http
-      .post<AuthResponse>(`${this.baseUrl}register`, payload)
+      .post<AuthResponse>(`${this.baseUrl}users/register`, payload)
       .pipe(
         tap((response) => {
           if (response.token) {
