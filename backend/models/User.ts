@@ -4,6 +4,7 @@ export interface IUser extends Document {
   username: string;
   password: string;
   email?: string;
+  refreshToken?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,6 +34,11 @@ const userSchema: Schema<IUser> = new Schema(
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
         "Please enter a valid email",
       ],
+    },
+    refreshToken: {
+      type: String,
+      required: false,
+      default: null,
     },
   },
   {

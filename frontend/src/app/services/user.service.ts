@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
 
 export interface User {
   _id: string;
@@ -27,10 +28,13 @@ export interface UpdateProfileResponse {
 export class UserService {
   private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+  ) {}
 
   private getAuthHeaders(): { Authorization: string } {
-    const token = localStorage.getItem('authToken');
+    const token = this.authService.getAccessToken();
     return {
       Authorization: `Bearer ${token}`,
     };
