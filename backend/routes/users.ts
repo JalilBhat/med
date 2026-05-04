@@ -137,20 +137,53 @@ router.get(
   },
 );
 
-// GET /api/users/:id - Get user by ID
-router.get(
+// PUT /api/users/:id - Update user by ID
+router.put(
   "/:id",
   authenticateToken,
   async (req: Request, res: Response): Promise<void> => {
     try {
-      const user = await User.findById(req.params.id, "-password");
-      if (!user) {
+      const { username, email } = req.body as {
+        username?: string;
+        email?: string;
+      };
+
+      // Get user ID from token
+      const token = req.headers.authorization?.split(" ")[1];
+      if (!token) {
+        res.status(401).json({ message: "No token provided" });
+        return;
+      }
+
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET || "abcdef123456",
+      ) as { id: string };
+      const userId = decoded.id;
+
+      // Check if user is updating their own profile or is admin (for now, only self-update)
+      if (req.params.id !== userId) {
+        res
+          .status(403)
+          .json({ message: "You can only update your own profile" });
+        return;
+      }
+
+      // Find and update user
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        { username, email },
+        { new: true, runValidators: true },
+      ).select("-password");
+
+      if (!updatedUser) {
         res.status(404).json({ message: "User not found" });
         return;
       }
-      res.json(user);
+
+      res.json({ message: "Profile updated successfully", user: updatedUser });
     } catch (error) {
-      console.error("Get user error:", error);
+      console.error("Update user error:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   },

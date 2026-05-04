@@ -1,17 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../services/auth.service';
-import { environment } from '../../environments/environment.prod';
-
-interface User {
-  _id: string;
-  username: string;
-  email?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { UserService, User } from '../services/user.service';
 
 interface UsersResponse {
   users: User[];
@@ -37,11 +28,10 @@ export class UsersComponent implements OnInit {
   pagination: UsersResponse['pagination'] | null = null;
   loading = false;
   error = '';
-  private baseUrl = environment.apiUrl;
 
   constructor(
-    private http: HttpClient,
     private auth: AuthService,
+    private userService: UserService,
     private router: Router,
   ) {}
 
@@ -57,27 +47,18 @@ export class UsersComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    const token = localStorage.getItem('authToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
+    this.userService.getUsers(page, limit).subscribe({
+      next: (response) => {
+        this.users = response.users;
+        this.pagination = response.pagination;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = 'Failed to load users';
+        this.loading = false;
+        console.error('Load users error:', err);
+      },
     });
-
-    this.http
-      .get<UsersResponse>(`${this.baseUrl}users?page=${page}&limit=${limit}`, {
-        headers,
-      })
-      .subscribe({
-        next: (response) => {
-          this.users = response.users;
-          this.pagination = response.pagination;
-          this.loading = false;
-        },
-        error: (err) => {
-          this.error = 'Failed to load users';
-          this.loading = false;
-          console.error('Load users error:', err);
-        },
-      });
   }
 
   goToPage(page: number) {
