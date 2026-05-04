@@ -137,6 +137,25 @@ router.get(
   },
 );
 
+// GET /api/users/:id - Get user by ID
+router.get(
+  "/:id",
+  authenticateToken,
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const user = await User.findById(req.params.id, "-password");
+      if (!user) {
+        res.status(404).json({ message: "User not found" });
+        return;
+      }
+      res.json(user);
+    } catch (error) {
+      console.error("Get user error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+);
+
 // PUT /api/users/:id - Update user by ID
 router.put(
   "/:id",
@@ -182,45 +201,6 @@ router.put(
       }
 
       res.json({ message: "Profile updated successfully", user: updatedUser });
-    } catch (error) {
-      console.error("Update user error:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  },
-);
-
-// PUT /api/users/:id - Update user
-router.put(
-  "/:id",
-  authenticateToken,
-  async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { username, email } = req.body as {
-        username?: string;
-        email?: string;
-      };
-
-      const updateData: Partial<IUser> = {};
-      if (username) updateData.username = username;
-      if (email) updateData.email = email;
-
-      const user = await User.findByIdAndUpdate(req.params.id, updateData, {
-        new: true,
-        runValidators: true,
-      });
-      if (!user) {
-        res.status(404).json({ message: "User not found" });
-        return;
-      }
-
-      const userResponse = {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        updatedAt: user.updatedAt,
-      };
-
-      res.json({ message: "User updated successfully", user: userResponse });
     } catch (error) {
       console.error("Update user error:", error);
       res.status(500).json({ message: "Internal server error" });
