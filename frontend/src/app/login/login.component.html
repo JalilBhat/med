@@ -1,19 +1,40 @@
-<section class="auth-shell">
-    <h2>Login</h2>
-    <form (ngSubmit)="submit()" class="auth-form">
-        <label>
-            Username
-            <input type="text" name="username" [(ngModel)]="username" required />
-        </label>
+<div class="auth-container">
+    <div class="brand-header">
+        <div class="logo">
+            <div class="logo-icon">🏥</div>
+            <h1>MedCare</h1>
+        </div>
+        <p class="tagline">Your Health, Our Priority</p>
+    </div>
 
-        <label>
-            Password
-            <input type="password" name="password" [(ngModel)]="password" required />
-        </label>
+    <section class="auth-shell">
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Sign in to your account</p>
 
-        <button type="submit">Login</button>
+        <form (ngSubmit)="submit()" class="auth-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input id="username" type="text" name="username" [(ngModel)]="username" required
+                    placeholder="Enter your username" />
+            </div>
 
-        <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
-        <p class="hint">Need an account? <a routerLink="/register">Register</a></p>
-    </form>
-</section>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" [(ngModel)]="password" required
+                    placeholder="Enter your password" />
+            </div>
+
+            <button type="submit" class="primary-btn">Sign In</button>
+
+            <div class="message-container">
+                <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+            </div>
+
+            <div class="auth-links">
+                <p>Don't have an account?
+                    <a [routerLink]="['/register']" class="link">Create Account</a>
+                </p>
+            </div>
+        </form>
+    </section>
+</div>

@@ -60,9 +60,10 @@
   border: none;
   border-radius: 6px;
   background: rgba(255,255,255,0.2);
-  color: white;
+  color: white !important;
   cursor: pointer;
   font-weight: 600;
+  transition: background 0.3s ease;
 }
 
 .logout-btn:hover {
@@ -118,9 +119,10 @@
   border: none;
   border-radius: 6px;
   background: #2f80ed;
-  color: white;
+  color: white !important;
   cursor: pointer;
   font-weight: 600;
+  transition: background 0.3s ease;
 }
 
 .feature-card button:hover {

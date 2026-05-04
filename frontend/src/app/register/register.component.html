@@ -1,25 +1,63 @@
-<section class="auth-shell">
-    <h2>Register</h2>
-    <form (ngSubmit)="submit()" class="auth-form">
-        <label>
-            Username
-            <input type="text" name="username" [(ngModel)]="username" required />
-        </label>
+<div class="auth-container">
+    <div class="brand-header">
+        <div class="logo">
+            <div class="logo-icon">🏥</div>
+            <h1>MedCare</h1>
+        </div>
+        <p class="tagline">Your Health, Our Priority</p>
+    </div>
 
-        <label>
-            Email
-            <input type="email" name="email" [(ngModel)]="email" />
-        </label>
+    <section class="auth-shell">
+        <h2>Join MedCare</h2>
+        <p class="subtitle">Create your account to get started</p>
 
-        <label>
-            Password
-            <input type="password" name="password" [(ngModel)]="password" required />
-        </label>
+        <form (ngSubmit)="submit()" class="auth-form" autocomplete="off" novalidate>
 
-        <button type="submit">Create account</button>
+            <!-- 🔥 Autofill trap fields -->
+            <input type="text" name="fake_username" autocomplete="username" style="display:none">
+            <input type="password" name="fake_password" autocomplete="current-password" style="display:none">
 
-        <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
-        <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
-        <p class="hint">Already have an account? <a routerLink="/login">Login</a></p>
-    </form>
-</section>
+            <!-- Username -->
+            <div class="form-group">
+                <label for="reg-username">Username</label>
+                <input id="reg-username" type="text" name="register_username" [(ngModel)]="username" required
+                    autocomplete="new-username" autocorrect="off" autocapitalize="off" spellcheck="false"
+                    placeholder="Choose a username" />
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="reg-email">Email Address</label>
+                <input id="reg-email" type="email" name="register_email" [(ngModel)]="email" autocomplete="off"
+                    autocorrect="off" autocapitalize="off" spellcheck="false"
+                    placeholder="Enter your email (optional)" />
+            </div>
+
+            <!-- Password with Toggle -->
+            <div class="form-group password-group">
+                <label for="reg-password">Password</label>
+
+                <div class="password-wrapper">
+                    <input id="reg-password" [type]="showPassword ? 'text' : 'password'" name="register_password"
+                        [(ngModel)]="password" required autocomplete="new-password"
+                        placeholder="Create a strong password" />
+
+                </div>
+            </div>
+
+            <button type="submit" class="primary-btn">Create Account</button>
+
+            <div class="message-container">
+                <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+                <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+            </div>
+
+            <div class="auth-links">
+                <p>Already have an account?
+                    <a [routerLink]="['/login']">Sign In</a>
+                </p>
+            </div>
+
+        </form>
+    </section>
+</div>

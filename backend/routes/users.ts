@@ -184,7 +184,7 @@ router.post("/refresh", async (req: Request, res: Response): Promise<void> => {
 // GET /api/users - Get all users with pagination
 router.get(
   "/",
-  //authenticateToken,
+  authenticateToken,
   async (req: Request, res: Response): Promise<void> => {
     try {
       const page = parseInt(req.query.page as string) || 1;

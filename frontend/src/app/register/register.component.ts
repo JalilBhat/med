@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -18,10 +18,22 @@ export class RegisterComponent {
   errorMessage = '';
   successMessage = '';
 
+  showPassword = false;
+
   constructor(
     private auth: AuthService,
     private router: Router,
   ) {}
+
+  ngOnInit() {
+    this.username = '';
+    this.email = '';
+    this.password = '';
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
 
   submit() {
     this.errorMessage = '';

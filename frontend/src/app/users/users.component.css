@@ -60,7 +60,7 @@
   border: none;
   border-radius: 6px;
   background: rgba(255,255,255,0.2);
-  color: white;
+  color: white !important;
   cursor: pointer;
   font-weight: 600;
 }
@@ -139,14 +139,19 @@
   border: 1px solid #2f80ed;
   border-radius: 6px;
   background: white;
-  color: #2f80ed;
+  color: #2f80ed !important;
   cursor: pointer;
   font-weight: 600;
 }
 
 .page-btn:hover:not(:disabled) {
   background: #2f80ed;
-  color: white;
+  color: white !important;
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .page-btn:disabled {
