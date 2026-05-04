@@ -11,70 +11,6 @@ router.get("/test", (req: Request, res: Response) => {
   res.json({ message: "User routes are working!" });
 });
 
-// POST /api/users/logout - Logout user
-router.post(
-  "/logout",
-  authenticateToken,
-  async (req: Request, res: Response): Promise<void> => {
-    try {
-      // Clear refresh token from database
-      if (req.user) {
-        await User.findByIdAndUpdate(req.user._id, { refreshToken: null });
-      }
-
-      res.json({ message: "Logout successful" });
-    } catch (error) {
-      console.error("Logout error:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  },
-);
-
-// POST /api/users/refresh - Refresh access token
-router.post("/refresh", async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { refreshToken } = req.body as { refreshToken: string };
-
-    if (!refreshToken) {
-      res.status(401).json({ message: "Refresh token required" });
-      return;
-    }
-
-    // Verify refresh token
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.JWT_REFRESH_SECRET || "refresh_secret_key_12345",
-    ) as { id: string; username: string };
-
-    // Check if refresh token exists in database
-    const user = await User.findById(decoded.id);
-    if (!user || user.refreshToken !== refreshToken) {
-      res.status(401).json({ message: "Invalid refresh token" });
-      return;
-    }
-
-    // Generate new access token
-    const newAccessToken = jwt.sign(
-      { id: user._id, username: user.username },
-      process.env.JWT_SECRET || "abcdef123456",
-      { expiresIn: "5m" },
-    );
-
-    res.json({
-      message: "Token refreshed successfully",
-      accessToken: newAccessToken,
-    });
-  } catch (error) {
-    console.error("Refresh token error:", error);
-    if (error instanceof jwt.JsonWebTokenError) {
-      res.status(401).json({ message: "Invalid or expired refresh token" });
-    } else {
-      res.status(500).json({ message: "Internal server error" });
-    }
-  }
-});
-
-
 // POST /api/users/register - Register a new user
 router.post("/register", async (req: Request, res: Response): Promise<void> => {
   try {
@@ -179,6 +115,69 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// POST /api/users/logout - Logout user
+router.post(
+  "/logout",
+  authenticateToken,
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      // Clear refresh token from database
+      if (req.user) {
+        await User.findByIdAndUpdate(req.user._id, { refreshToken: null });
+      }
+
+      res.json({ message: "Logout successful" });
+    } catch (error) {
+      console.error("Logout error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+);
+
+// POST /api/users/refresh - Refresh access token
+router.post("/refresh", async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { refreshToken } = req.body as { refreshToken: string };
+
+    if (!refreshToken) {
+      res.status(401).json({ message: "Refresh token required" });
+      return;
+    }
+
+    // Verify refresh token
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_SECRET || "refresh_secret_key_12345",
+    ) as { id: string; username: string };
+
+    // Check if refresh token exists in database
+    const user = await User.findById(decoded.id);
+    if (!user || user.refreshToken !== refreshToken) {
+      res.status(401).json({ message: "Invalid refresh token" });
+      return;
+    }
+
+    // Generate new access token
+    const newAccessToken = jwt.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT_SECRET || "abcdef123456",
+      { expiresIn: "5m" },
+    );
+
+    res.json({
+      message: "Token refreshed successfully",
+      accessToken: newAccessToken,
+    });
+  } catch (error) {
+    console.error("Refresh token error:", error);
+    if (error instanceof jwt.JsonWebTokenError) {
+      res.status(401).json({ message: "Invalid or expired refresh token" });
+    } else {
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
 });
 

@@ -1,1 +1,4 @@
+<app-loader [isLoading]="(isRefreshing$ | async) ?? false" message="Refreshing session...">
+</app-loader>
+
 <router-outlet></router-outlet>

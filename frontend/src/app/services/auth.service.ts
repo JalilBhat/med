@@ -41,6 +41,7 @@ export class AuthService {
   private isLoggedInSubject = new BehaviorSubject<boolean>(
     this.checkLoggedIn(),
   );
+  private isRefreshingSubject = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient) {
     this.startTokenRefreshTimer();
@@ -97,6 +98,8 @@ export class AuthService {
       return throwError(() => new Error('No refresh token available'));
     }
 
+    this.isRefreshingSubject.next(true);
+
     return this.http
       .post<RefreshTokenResponse>(`${this.baseUrl}users/refresh`, {
         refreshToken,
@@ -107,8 +110,10 @@ export class AuthService {
             localStorage.setItem('accessToken', response.accessToken);
             this.startTokenRefreshTimer();
           }
+          this.isRefreshingSubject.next(false);
         }),
         catchError((error) => {
+          this.isRefreshingSubject.next(false);
           // If refresh fails, logout user
           this.logout().subscribe();
           return throwError(() => error);
@@ -130,6 +135,10 @@ export class AuthService {
 
   isLoggedIn$(): Observable<boolean> {
     return this.isLoggedInSubject.asObservable();
+  }
+
+  isRefreshing$(): Observable<boolean> {
+    return this.isRefreshingSubject.asObservable();
   }
 
   private checkLoggedIn(): boolean {
